@@ -15,33 +15,21 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
-  * @file Time.h
+  * @file SHT30.h
   * 
-  * Helper function to set the internal RTC date and time.
+  * Helper function to read the SHT30 environment data.
   */
 #pragma once
+#include "Data.hpp"
 
-/* Set the internal RTC clock with the weather timestamp */
-bool SetRTCDateTime(MyData &myData)
+/* Read the SHT30 environment chip data */
+bool GetSHT30Values(MyData &myData)
 {
-   time_t time = myData.weather.currentTime;
-
-   if (time > 0) {
-      rtc_time_t RTCtime;
-      rtc_date_t RTCDate;
-   
-      Serial.println("Epochtime: " + String(time));
-      
-      RTCDate.year = year(time);
-      RTCDate.mon  = month(time);
-      RTCDate.day  = day(time);
-      M5.RTC.setDate(&RTCDate);
-   
-      RTCtime.hour = hour(time);
-      RTCtime.min  = minute(time);
-      RTCtime.sec  = second(time);
-      M5.RTC.setTime(&RTCtime);
+   M5.SHT30.UpdateData();
+   if(M5.SHT30.GetError() == 0) {
+      myData.sht30Temperatur = (int) M5.SHT30.GetTemperature();
+      myData.sht30Humidity   = (int) M5.SHT30.GetRelHumidity();
       return true;
-   } 
+   }
    return false;
 }

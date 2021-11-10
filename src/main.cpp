@@ -21,18 +21,17 @@
   */
   
 #include <M5EPD.h>
-#include "Config.h"
-#include "ConfigOverride.h" // Remove this line
-#include "Data.h"
-#include "Display.h"
-#include "Battery.h"
-#include "EPD.h"
-#include "EPDWifi.h"
-#include "Moon.h"
-#include "SHT30.h"
-#include "Time.h"
-#include "Utils.h"
-#include "Weather.h"
+#include "Config.hpp"
+#include "ConfigOverride.hpp" // Remove this line
+#include "Data.hpp"
+#include "Display.hpp"
+#include "Battery.hpp"
+#include "EPD.hpp"
+#include "EPDWifi.hpp"
+#include "SHT30.hpp"
+#include "Time.hpp"
+#include "Utils.hpp"
+#include "Weather.hpp"
 
 // Refresh the M5Paper info more often.
 // #define REFRESH_PARTLY 1
@@ -48,7 +47,6 @@ void setup()
    if (StartWiFi(myData.wifiRSSI)) {
       GetBatteryValues(myData);
       GetSHT30Values(myData);
-      GetMoonValues(myData);
       if (myData.weather.Get()) {
          SetRTCDateTime(myData);
       }
@@ -64,7 +62,6 @@ void setup()
       if (StartWiFi(myData.wifiRSSI)) {
          GetBatteryValues(myData);
          GetSHT30Values(myData);
-         GetMoonValues(myData);
          if (myData.weather.Get()) {
             SetRTCDateTime(myData);
          }

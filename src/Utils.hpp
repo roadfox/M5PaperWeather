@@ -20,10 +20,9 @@
   * A collection of helper functions.
   */
 #pragma once
-#include <Time.h>
 #include <TimeLib.h> 
 
-/* Convert the RTC date time to DD.MM.YYYY HH:MM:SS */
+/* Convert the RTC date time to YYYY/MM/DD HH:MM:SS */
 String getRTCDateTimeString() 
 {
    char       buff[32];
@@ -33,8 +32,8 @@ String getRTCDateTimeString()
    M5.RTC.getDate(&date_struct);
    M5.RTC.getTime(&time_struct);
 
-   sprintf(buff,"%02d.%02d.%04d %02d:%02d:%02d",
-      date_struct.day,  date_struct.mon, date_struct.year,
+   sprintf(buff,"%04d/%02d/%02d %02d:%02d:%02d",
+      date_struct.year, date_struct.mon, date_struct.day,
       time_struct.hour, time_struct.min, time_struct.sec);
 
    return (String) buff;
@@ -68,8 +67,8 @@ String getRTCDateString()
    
    M5.RTC.getDate(&date_struct);
 
-   sprintf(buff,"%02d.%02d.%04d",
-      date_struct.day,  date_struct.mon, date_struct.year);
+   sprintf(buff,"%04d/%02d/%02d",
+      date_struct.year, date_struct.mon, date_struct.day);
 
    return (String) buff;
 }
@@ -88,27 +87,33 @@ String getRTCTimeString()
    return (String) buff;
 }
 
-/* Convert the time_t to the DD.MM.YYYY HH:MM:SS format */
+/* Convert the time_t to the YYYY/MM/DD HH:MM:SS format */
 String getDateTimeString(time_t rawtime)
 {
    char buff[32];
    
-   sprintf(buff,"%02d.%02d.%04d %02d:%02d:%02d",
-      day(rawtime), month(rawtime), year(rawtime),
+   sprintf(buff,"%04d/%02d/%02d %02d:%02d:%02d",
+      year(rawtime), month(rawtime), day(rawtime),
       hour(rawtime), minute(rawtime), second(rawtime));
 
    return (String) buff;
 }
 
-/* Convert the time_t to the date part DD.MM.YYYY */
+/* Convert the time_t to the date part YYYY/MM/DD */
 String getDateString(time_t rawtime)
 {
    char buff[32];
    
-   sprintf(buff,"%02d.%02d.%04d",
-      day(rawtime), month(rawtime), year(rawtime));
+   sprintf(buff,"%04d/%02d/%02d",
+      year(rawtime), month(rawtime), day(rawtime));
 
    return (String) buff;
+}
+
+/* Convert the time_t to the date part MM/DD */
+String getShortDayOfWeekString(time_t rawtime)
+{
+   return (String) dayShortStr(weekday(rawtime));
 }
 
 /* Convert the time_t to the time part HH:MM:SS format */
@@ -174,38 +179,12 @@ int WifiGetRssiAsQualityInt(int rssi)
    return quality;
 }
 
-/* Convert a day, month, year to a julian int
- * The moon phase calculation is part of the github project
- * https://github.com/G6EJD/ESP32-Revised-Weather-Display-42-E-Paper
- * See http://www.dsbird.org.uk
- * Copyright (c) David Bird
- */
-int JulianDate(int d, int m, int y) 
+/* Convert the float value to string with unit */
+String getFloatString(float value, const char* unit)
 {
-   int mm, yy, k1, k2, k3, j;
+   char buff[32];
    
-   yy = y - (int)((12 - m) / 10);
-   mm = m + 9;
-   if (mm >= 12) mm = mm - 12;
-   k1 = (int)(365.25 * (yy + 4712));
-   k2 = (int)(30.6001 * mm + 0.5);
-   k3 = (int)((int)((yy / 100) + 49) * 0.75) - 38;
-   // 'j' for dates in Julian calendar:
-   j = k1 + k2 + d + 59 + 1;
-   if (j > 2299160) j = j - k3; // 'j' is the Julian date at 12h UT (Universal Time) For Gregorian calendar:
-   return j;
-} 
+   sprintf(buff,"%6.2f%s", value, unit);
 
-/* Normalize the moon phase with the julian date format
- * The moon phase calculation is part of the github project
- * https://github.com/G6EJD/ESP32-Revised-Weather-Display-42-E-Paper
- * See http://www.dsbird.org.uk
- * Copyright (c) David Bird
- */
-double NormalizedMoonPhase(int d, int m, int y) 
-{
-   int    j     = JulianDate(d, m, y);
-   double Phase = (j + 4.867) / 29.53059;
-   
-   return (Phase - (int) Phase);
+   return (String) buff;
 }

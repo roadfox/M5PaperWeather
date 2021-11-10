@@ -15,22 +15,40 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
-  * @file Moon.h
+  * @file Battery.h
   * 
-  * Helper function to get the moon rise and set data.
+  * Helperfunctions for reading the battery value.
   */
 #pragma once
-#include <MoonRise.h>
 
-/* Calculate the moon rise and set with the MoonRise library */
-bool GetMoonValues(MyData &myData)
+#include "Data.hpp"
+
+/**
+  * Read the battery voltage
+  */
+bool GetBatteryValues(MyData &myData)
 {
-   MoonRise mr;
-   time_t   time = GetRTCTime();
+   uint32_t vol = M5.getBatteryVoltage();
 
-   mr.calculate(LATITUDE, LONGITUDE, time);
+   if (vol < 3300) {
+      vol = 3300;
+   } else if (vol > 4350) {
+      vol = 4350;
+   }
+  
+   float battery = (float)(vol - 3300) / (float)(4350 - 3300);
 
-   myData.moonRise = mr.riseTime;
-   myData.moonSet =  mr.setTime;
+   myData.batteryVolt = vol / 1000.0f;
+   Serial.println("batteryVolt: " + String(myData.batteryVolt));
+   
+   if (battery <= 0.01) {
+      battery = 0.01;
+   }
+   if (battery > 1) {
+      battery = 1;
+   }
+   myData.batteryCapacity = (int) (battery * 100);
+   Serial.println("batteryCapacity: " + String(myData.batteryCapacity));
+   
    return true;
 }

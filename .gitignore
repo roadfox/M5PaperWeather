@@ -7,3 +7,5 @@
 .vs
 *.user
 tools
+.pio
+.vscode
