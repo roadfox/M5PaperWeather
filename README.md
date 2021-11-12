@@ -1,11 +1,11 @@
 
 ## M5PaperWeather
-  **M5Paper project with weather information from openweathermap ***
+  *** M5Paper project with weather information from openweathermap ***
 
    ![M5PaperWeather](images/M5PaperWeather.png "M5Paper")
 
 
-Forked from [https://github.com/mzyy94/M5PaperWeather](https://github.com/mzyy94/M5PaperWeather)
+Forked from [https://github.com/mzyy94/M5PaperWeather](https://github.com/mzyy94/M5PaperWeather), 
 Originally forked from [https://github.com/Bastelschlumpf/M5PaperWeather](https://github.com/Bastelschlumpf/M5PaperWeather)
 ### Description
   **Platform.io** project to show internal environment data and weather information from 
@@ -14,12 +14,11 @@ Originally forked from [https://github.com/Bastelschlumpf/M5PaperWeather](https:
   You need an api key from openweathermap.
   The software shows the following information:
   * A header with version, city wifi strength and battery status
-  * _[NEW]_ Current weather icon, status, temperature and rain in mm
+  * Current weather icon, status, temperature and rain in mm
   * Sun section with sunrise and sunset 
   * Wind section with wind direction and wind speed
   * The internal SH30 sensor data (temperature and humidity) with the current date and time
-  * _[NEW]_ A daily forecast with min/max temperature, probability of precipitation, and a weather icon.
-  * _[NEW]_ Hourly and daily forecast graphs with temperature and rain.
+  * 7 day forecast graphs for rain.
 
 ### License
    This program is licensed under GPL-3.0
