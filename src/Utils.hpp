@@ -168,7 +168,7 @@ String getFloatString(float value, const char* unit)
 {
    char buff[32];
    
-   sprintf(buff,"%6.2f%s", value, unit);
+   sprintf(buff,"%6.1f%s", value, unit);
 
    return (String) buff;
 }
