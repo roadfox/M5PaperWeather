@@ -1,19 +1,3 @@
-/*
-   Copyright (C) 2021 SFini
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 /**
   * @file Display.h
   * 
@@ -180,8 +164,8 @@ void WeatherDisplay::DrawWeatherInfo(int x, int y, int dx, int dy)
 
    canvas.drawCentreString(myData.weather.hourlyMain[0], x + dx / 2, y + 110, 1);
 
-   canvas.drawString(getFloatString(myData.weather.hourlyMaxTemp[0], " C"), x + 30, y + 180, 1);
-   canvas.drawString(getFloatString(myData.weather.hourlyRain[0], " mm"),   x + 30, y + 220, 1);
+   canvas.drawString(getFloatString(myData.weather.hourlyMaxTemp[0], " C"), x + 30, y + 170, 1);
+   canvas.drawString(getFloatString(myData.weather.hourlyRain[0], " mm"),   x + 30, y + 210, 1);
 }
 
 /* Draw the in the wind section

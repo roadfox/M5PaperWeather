@@ -5,6 +5,7 @@
    ![M5PaperWeather](images/M5PaperWeather.png "M5Paper")
 
 
+Forked from [https://github.com/mzyy94/M5PaperWeather](https://github.com/mzyy94/M5PaperWeather)
 Originally forked from [https://github.com/Bastelschlumpf/M5PaperWeather](https://github.com/Bastelschlumpf/M5PaperWeather)
 ### Description
   **Platform.io** project to show internal environment data and weather information from 

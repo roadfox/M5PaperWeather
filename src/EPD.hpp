@@ -1,19 +1,3 @@
-/*
-   Copyright (C) 2021 SFini
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 /**
   * @file EPD.h
   * 
@@ -51,5 +35,26 @@ void ShutdownEPD(int sec)
    esp_sleep_enable_timer_wakeup(sec * 1000000);
    esp_deep_sleep_start();   
 */   
+
    M5.shutdown(sec);
+}
+
+void SleepEPD(int sec)
+{
+   Serial.println("Going to Sleep");
+
+      // M5Paper deep sleep with touch wakeup
+      M5.disableEPDPower();
+      M5.disableEXTPower();
+      //M5.disableMainPower();
+      //esp_sleep_enable_ext0_wakeup(GPIO_NUM_36, LOW); // TOUCH_INT
+      esp_sleep_enable_ext0_wakeup(GPIO_NUM_38, LOW); // Button
+      esp_sleep_enable_timer_wakeup(1800*1000000);  // wakeup every x sec
+      gpio_hold_en(GPIO_NUM_2); // M5EPD_MAIN_PWR_PIN
+      gpio_deep_sleep_hold_en();
+      esp_deep_sleep_start();
+
+      // M5Paper light sleep with touch wakeup
+      //esp_sleep_enable_ext0_wakeup(GPIO_NUM_36, LOW); // TOUCH_INT
+      //esp_light_sleep_start();
 }
