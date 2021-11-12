@@ -1,6 +1,6 @@
 
 ## M5PaperWeather
-  *** M5Paper project with weather information from openweathermap ***
+  **M5Paper project with weather information from openweathermap**
 
    ![M5PaperWeather](images/M5PaperWeather.png "M5Paper")
 
