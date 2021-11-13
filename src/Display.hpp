@@ -164,10 +164,16 @@ void WeatherDisplay::DrawWeatherInfo(int x, int y, int dx, int dy)
 
    canvas.drawCentreString(myData.weather.hourlyMain[0], x + dx / 2, y + 115, 1);
 
-   canvas.setTextSize(5);
-   canvas.drawString(getFloatString(myData.weather.hourlyMaxTemp[0]," C"), x - 30, y + 190, 1);
+   // temp
+   canvas.setTextSize(7);
+   char buff[8];
+   sprintf(buff,"%.0f",myData.weather.hourlyMaxTemp[0]);
+   canvas.drawRightString(buff, x + dx / 2 + 20, y + 170, 1);
    canvas.setTextSize(4);
-   canvas.drawString(getFloatString(myData.weather.hourlyRain[0], " mm"),  x - 10, y + 240, 1);
+   canvas.drawString(      "C", x + dx / 2 + 20, y + 170, 1);
+   // rain
+   canvas.setTextSize(4);
+   canvas.drawCentreString(getFloatString(myData.weather.hourlyRain[0], "mm"),  x + dx / 2, y + 240, 1);
 }
 
 /* Draw the in the wind section
@@ -175,6 +181,14 @@ void WeatherDisplay::DrawWeatherInfo(int x, int y, int dx, int dy)
  * https://github.com/G6EJD/ESP32-Revised-Weather-Display-42-E-Paper
  * See http://www.dsbird.org.uk
  * Copyright (c) David Bird
+ * 
+ * @param x position of the center the arrow rotates arround
+ * @param y position of the center the arrow rotates arround
+ * @param asize displacement radius from the center
+ * @param aangle clockwise rotation of the arrow
+ * @param pwidth width of the arrow base
+ * @param plength length of the arrow
+ * 
  */
 void WeatherDisplay::Arrow(int x, int y, int asize, float aangle, int pwidth, int plength) 
 {
@@ -228,10 +242,12 @@ void WeatherDisplay::DisplayDisplayWindSection(int x, int y, float angle, float 
    canvas.drawCentreString("S", x, y + cradius + 5, 1);
    canvas.drawCentreString("W", x - cradius - 15, y - 3, 1);
    canvas.drawCentreString("E", x + cradius + 15,  y - 3, 1);
-   canvas.drawCentreString(String(windspeed, 1), x, y - 20, 1);
-   canvas.drawCentreString("m/s", x, y, 1);
+   canvas.setTextSize(4);
+   canvas.drawCentreString(String(windspeed, 1), x, y - 30, 1);
+   canvas.setTextSize(3);
+   canvas.drawCentreString("m/s", x, y + 10, 1);
 
-   Arrow(x, y, cradius - 17, angle, 15, 27);
+   Arrow(x, y, cradius - 10, angle, 23, 55);
 }
 
 /* Draw the wind information part */
@@ -241,7 +257,7 @@ void WeatherDisplay::DrawWindInfo(int x, int y, int dx, int dy)
    canvas.drawCentreString("Wind", x + dx / 2, y + 9, 1);
    canvas.drawLine(x, y + 42, x + dx, y + 42, M5EPD_Canvas::G15);
 
-   DisplayDisplayWindSection(x + dx / 2, y + dy / 2 + 20, myData.weather.winddir, myData.weather.windspeed, 75);
+   DisplayDisplayWindSection(x + dx / 2, y + dy / 2 + 20, myData.weather.winddir, myData.weather.windspeed, 95);
 }
 
 /* Draw the M5Paper environment and RTC information */
@@ -257,12 +273,17 @@ void WeatherDisplay::DrawM5PaperInfo(int x, int y, int dx, int dy)
    canvas.setTextSize(3);
    canvas.drawCentreString("updated", x + dx / 2, y + 130, 1);
 
-   canvas.setTextSize(5);
-   DrawIcon(x + 35, y + 170, (uint16_t *) TEMPERATURE64x64);
-   canvas.drawString(String(myData.sht30Temperatur) + " C", x + 35, y + 240, 1);
+   DrawIcon(x + dx / 4 - 32, y + 170, (uint16_t *) TEMPERATURE64x64);
+   canvas.setTextSize(7);
+   canvas.drawRightString(String(myData.sht30Temperatur - 2), x + dx / 4 + 30, y + 240, 1);
    canvas.setTextSize(4);
-   DrawIcon(x + 145, y + 170, (uint16_t *) HUMIDITY64x64);
-   canvas.drawString(String(myData.sht30Humidity) + "%", x + 150, y + 240, 1);
+   canvas.drawString("C", x + dx / 4 + 30, y + 240, 1);
+
+   DrawIcon(x + dx / 4 * 3 - 40, y + 170, (uint16_t *) HUMIDITY64x64);
+   canvas.setTextSize(7);
+   canvas.drawRightString(String(myData.sht30Humidity), x + dx / 4 * 3 + 20, y + 240, 1);
+   canvas.setTextSize(4);
+   canvas.drawString("%", x + dx / 4 * 3 + 20, y + 240, 1);
    
 }
 
@@ -473,7 +494,7 @@ void WeatherDisplay::Show()
    int current_box_height = 320;
    int xPos0 = 15;
    int xPos1 = 232 + 15;
-   int xPos2 = 2 * 232 - 15;
+   int xPos2 = 2 * 232 - 35;
    int xPos3 = 3 * 232 - 5;
 
    int row1width = xPos1 - xPos0;

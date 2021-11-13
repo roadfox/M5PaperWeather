@@ -5,14 +5,15 @@
    ![M5PaperWeather](images/M5PaperWeather.png "M5Paper")
 
 
-Forked from [https://github.com/mzyy94/M5PaperWeather](https://github.com/mzyy94/M5PaperWeather), 
+Forked from [https://github.com/mzyy94/M5PaperWeather](https://github.com/mzyy94/M5PaperWeather). 
 Originally forked from [https://github.com/Bastelschlumpf/M5PaperWeather](https://github.com/Bastelschlumpf/M5PaperWeather)
 ### Description
   **Platform.io** project to show internal environment data and weather information from 
   openweathermap https://openweathermap.org on the e-ink display of the M5Paper.
-  Please copy the **Config.hpp** file, rename it to ConfigOverride.hpp, and edit it with your own data.
+  Please copy the **Config.hpp** file, rename it to **ConfigOverride.hpp**, and edit it with your own data.
   You need an api key from openweathermap.
   The software shows the following information:
+  * Updates every 60min or on Button Press
   * A header with version, city wifi strength and battery status
   * Current weather icon, status, temperature and rain in mm
   * Sun section with sunrise and sunset 

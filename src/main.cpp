@@ -39,7 +39,7 @@ void setup()
       StopWiFi();
    }
    //ShutdownEPD(60 * 60); // every 1 hour
-   SleepEPD(1800);  // every 30 min
+   SleepEPD(3600);  // every 60 min
 #else 
    myData.LoadNVS();
    if (myData.nvsCounter == 1) {
