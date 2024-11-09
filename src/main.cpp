@@ -6,7 +6,6 @@
   
 #include <M5EPD.h>
 #include "Config.hpp"
-#include "ConfigOverride.hpp" // Remove this line
 #include "Data.hpp"
 #include "Display.hpp"
 #include "Battery.hpp"
@@ -38,8 +37,8 @@ void setup()
       myDisplay.Show();
       StopWiFi();
    }
-   //ShutdownEPD(60 * 60); // every 1 hour
-   SleepEPD(3600);  // every 60 min
+   ShutdownEPD(60 * 60); // every 1 hour
+   //SleepEPD(3600);  // every 60 min
 #else 
    myData.LoadNVS();
    if (myData.nvsCounter == 1) {
