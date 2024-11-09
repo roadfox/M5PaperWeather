@@ -55,12 +55,12 @@ protected:
    }
 
    /* Calls the openweathermap request and deserialisation the json data. */
-   bool GetOpenWeatherJsonDoc(DynamicJsonDocument &doc)
+   bool GetOpenWeatherJsonDoc(JsonDocument &doc)
    {
       WiFiClient client;
       HTTPClient http;
       String     uri;
-      
+
       uri += "/data/3.0/onecall";
       uri += "?lat=" + String((float) LATITUDE, 5);
       uri += "&lon=" + String((float) LONGITUDE, 5);
@@ -70,26 +70,29 @@ protected:
       Serial.printf("GetWeather: http://%s/%s\n", OPENWEATHER_SRV, uri.c_str());
 
       client.stop();
-      http.begin(client, OPENWEATHER_SRV, OPENWEATHER_PORT, uri);
+      if (!http.begin(client, OPENWEATHER_SRV, OPENWEATHER_PORT, uri)) {
+         Serial.println("Failed to connect to server");
+         return false;
+      }
       
       int httpCode = http.GET();
       
       if (httpCode != HTTP_CODE_OK) {
-         Serial.printf("GetWeather failed, error: %s", http.errorToString(httpCode).c_str());
-         client.stop();
+         Serial.printf("GetWeather failed, error: %s\n", http.errorToString(httpCode).c_str());
          http.end();
          return false;
-      } else {
-         DeserializationError error = deserializeJson(doc, http.getStream());
-         
-         if (error) {
-            Serial.print(F("deserializeJson() failed: "));
-            Serial.println(error.c_str());
-            return false;
-         } else {
-            return true;
-         }
       }
+
+      DeserializationError error = deserializeJson(doc, http.getStream());
+      http.end();
+      
+      if (error) {
+         Serial.print(F("deserializeJson() failed: "));
+         Serial.println(error.c_str());
+         return false;
+      }
+      
+      return true;
    }
 
    /* Fill from the json data into the internal data. */
@@ -108,20 +111,20 @@ protected:
       JsonArray hourly_list = root["hourly"];
       hourlyTime[0]    = LocalTime(root["current"]["dt"].as<int>());
       hourlyMaxTemp[0] = root["current"]["temp"].as<float>();
-      hourlyMain[0]    = root["current"]["weather"][0]["main"].as<char *>();
+      hourlyMain[0]    = root["current"]["weather"][0]["main"].as<const char *>();
       hourlyRain[0]    = root["current"]["rain"]["1h"].as<float>();
       hourlyPop[0]     = root["current"]["pop"].as<float>() * 100;
       hourlyPressure[0]= root["current"]["pressure"].as<float>();
-      hourlyIcon[0]    = root["current"]["weather"][0]["icon"].as<char *>();
+      hourlyIcon[0]    = root["current"]["weather"][0]["icon"].as<const char *>();
       for (int i = 1; i < MAX_HOURLY; i++) {
          if (i < hourly_list.size()) {
             hourlyTime[i]    = LocalTime(hourly_list[i - 1]["dt"].as<int>());
             hourlyMaxTemp[i] = hourly_list[i - 1]["temp"].as<float>();
-            hourlyMain[i]    = hourly_list[i - 1]["weather"][0]["main"].as<char *>();
+            hourlyMain[i]    = hourly_list[i - 1]["weather"][0]["main"].as<const char *>();
             hourlyRain[i]    = hourly_list[i - 1]["rain"]["1h"].as<float>();
             hourlyPop[i]     = hourly_list[i - 1]["pop"].as<float>() * 100;
             hourlyPressure[i]= hourly_list[i - 1]["pressure"].as<float>();
-            hourlyIcon[i]    = hourly_list[i - 1]["weather"][0]["icon"].as<char *>();
+            hourlyIcon[i]    = hourly_list[i - 1]["weather"][0]["icon"].as<const char *>();
             if (hourlyRain[i] > hourlyMaxRain) {
                hourlyMaxRain = hourlyRain[i] + 4;
             }
@@ -143,7 +146,7 @@ protected:
             forecastRain[i]     = dayly_list[i]["rain"].as<float>();
             forecastPop[i]      = dayly_list[i]["pop"].as<float>() * 100;
             forecastPressure[i] = dayly_list[i]["pressure"].as<float>();
-            forecastIcon[i]     = dayly_list[i]["weather"][0]["icon"].as<char *>();
+            forecastIcon[i]     = dayly_list[i]["weather"][0]["icon"].as<const char *>();
          }
          if (forecastRain[i] > forecastMaxRain) {
             forecastMaxRain = forecastRain[i] + 4;
@@ -199,7 +202,7 @@ public:
    /* Start the request and the filling. */
    bool Get()
    {
-      DynamicJsonDocument doc(35 * 1024);
+      JsonDocument doc;
    
       if (GetOpenWeatherJsonDoc(doc)) {
          return Fill(doc.as<JsonObject>());
