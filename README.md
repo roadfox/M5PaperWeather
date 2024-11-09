@@ -11,13 +11,12 @@ Originally forked from [https://github.com/Bastelschlumpf/M5PaperWeather](https:
 
 **Platform.io** project to show internal environment data and weather information from
 openweathermap https://openweathermap.org on the e-ink display of the M5Paper.
-Please copy the **Config.hpp** file, rename it to **ConfigOverride.hpp**, and edit it with your own data.
+Please copy the **Config.template.hpp** to **Config.hpp**, and edit it with your own data.
 You need an api key from openweathermap.
 As of the new API version 3.x.x, an account with a credit card on file is mandatory, but 1000 requests per day are free.
 Do not forget to set a limit of 1000 requests in the account.
 Set the longitude and latitude of your location and your api key and then check if you get answer within your browser.
 [http://api.openweathermap.org/data/3.0/onecall?lat=61.496052lon=23.7798units=metriclang=enexclude=minutelyappid=your](http://api.openweathermap.org/data/3.0/onecall?lat=61.496052&lon=23.7798&units=metric&lang=en&exclude=minutely&appid=your) api 3.0.0 key ***
-
 
   The software shows the following information:
 
